@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>School Portal | Login</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    color:white;
+    background:#06111f;
+}
+
+/* ================= BACKGROUND ================= */
+
+.background{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    z-index:-2;
+
+    background:
+        radial-gradient(
+            circle at 10% 20%,
+            #123f5c,
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 90% 80%,
+            #35115c,
+            transparent 35%
+        ),
+        #06111f;
+}
+
+.orb{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(10px);
+    opacity:.4;
+    animation:float 10s infinite ease-in-out;
+}
+
+.orb1{
+    width:300px;
+    height:300px;
+    background:#00d9ff;
+    top:-80px;
+    left:-80px;
+}
+
+.orb2{
+    width:350px;
+    height:350px;
+    background:#7c3aed;
+    right:-100px;
+    bottom:-100px;
+    animation-delay:2s;
+}
+
+.orb3{
+    width:180px;
+    height:180px;
+    background:#00ffa6;
+    left:45%;
+    top:70%;
+    animation-delay:4s;
+}
+
+@keyframes float{
+
+    0%,100%{
+        transform:translate(0,0) scale(1);
+    }
+
+    50%{
+        transform:translate(35px,-35px) scale(1.15);
+    }
+
+}
+
+/* ================= LOGIN CARD ================= */
+
+.login-container{
+    width:95%;
+    max-width:440px;
+
+    padding:35px;
+
+    border-radius:28px;
+
+    background:
+        rgba(255,255,255,.07);
+
+    border:
+        1px solid
+        rgba(255,255,255,.15);
+
+    backdrop-filter:blur(25px);
+
+    box-shadow:
+        0 30px 80px
+        rgba(0,0,0,.45);
+
+    animation:
+        appear .8s ease;
+
+    position:relative;
+}
+
+@keyframes appear{
+
+    from{
+        opacity:0;
+        transform:translateY(40px) scale(.95);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+
+}
+
+/* ================= LOGO ================= */
+
+.logo{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.logo-icon{
+
+    width:80px;
+    height:80px;
+
+    margin:auto;
+    margin-bottom:15px;
+
+    border-radius:24px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:38px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00d9ff,
+            #7c3aed
+        );
+
+    box-shadow:
+        0 0 35px
+        rgba(0,217,255,.3);
+
+    animation:
+        pulse 3s infinite;
+}
+
+@keyframes pulse{
+
+    0%,100%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.06);
+    }
+
+}
+
+.logo h1{
+    font-size:28px;
+    margin-bottom:5px;
+}
+
+.logo h1 span{
+    color:#00e5ff;
+}
+
+.logo p{
+    color:#93a4b8;
+    font-size:14px;
+}
+
+/* ================= FORM ================= */
+
+.form-group{
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+
+    margin-bottom:8px;
+
+    font-size:14px;
+
+    color:#b9c7d8;
+}
+
+.input-box{
+    position:relative;
+}
+
+.input-icon{
+
+    position:absolute;
+
+    left:14px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    font-size:18px;
+
+    opacity:.8;
+}
+
+input,
+select{
+
+    width:100%;
+
+    padding:14px 14px 14px 45px;
+
+    border-radius:13px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.1);
+
+    outline:none;
+
+    color:white;
+
+    background:
+        rgba(255,255,255,.06);
+
+    transition:.3s;
+
+    font-size:15px;
+}
+
+input:focus,
+select:focus{
+
+    border-color:#00d9ff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(0,217,255,.1);
+}
+
+input::placeholder{
+    color:#718197;
+}
+
+select{
+    padding-left:45px;
+}
+
+select option{
+    background:#0b192b;
+    color:white;
+}
+
+/* ================= PASSWORD ================= */
+
+.password-toggle{
+
+    position:absolute;
+
+    right:14px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    border:0;
+
+    background:none;
+
+    color:#91a2b7;
+
+    cursor:pointer;
+
+    font-size:17px;
+}
+
+/* ================= LOGIN BUTTON ================= */
+
+.login-btn{
+
+    width:100%;
+
+    border:0;
+
+    padding:15px;
+
+    border-radius:14px;
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00bcd4,
+            #7c3aed
+        );
+
+    box-shadow:
+        0 10px 30px
+        rgba(0,188,212,.2);
+
+    transition:.3s;
+
+    margin-top:5px;
+}
+
+.login-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 15px 40px
+        rgba(0,188,212,.3);
+}
+
+.login-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+    transform:none;
+}
+
+/* ================= STATUS ================= */
+
+.status{
+
+    min-height:22px;
+
+    margin-top:15px;
+
+    text-align:center;
+
+    font-size:14px;
+
+    color:#ff8585;
+}
+
+/* ================= FOOTER ================= */
+
+.footer{
+
+    text-align:center;
+
+    margin-top:25px;
+
+    color:#718197;
+
+    font-size:12px;
+}
+
+.footer span{
+    color:#00d9ff;
+}
+
+/* ================= LOADING ================= */
+
+.loading{
+
+    display:none;
+
+    width:18px;
+    height:18px;
+
+    border:3px solid
+        rgba(255,255,255,.3);
+
+    border-top-color:white;
+
+    border-radius:50%;
+
+    animation:spin .8s linear infinite;
+
+    margin:auto;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:500px){
+
+    .login-container{
+        padding:25px 20px;
+        border-radius:22px;
+    }
+
+    .logo-icon{
+        width:65px;
+        height:65px;
+        font-size:30px;
+    }
+
+    .logo h1{
+        font-size:24px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<!-- BACKGROUND -->
+
+<div class="background">
+
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+
+</div>
+
+
+<!-- LOGIN -->
+
+<div class="login-container">
+
+
+    <!-- LOGO -->
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            🎓
+        </div>
+
+        <h1>
+            SCHOOL <span>PORTAL</span>
+        </h1>
+
+        <p>
+            Sign in to access your dashboard
+        </p>
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <form
+        id="loginForm"
+        onsubmit="login(event)"
+    >
+
+
+        <!-- USERNAME -->
+
+        <div class="form-group">
+
+            <label>
+                Username
+            </label>
+
+            <div class="input-box">
+
+                <span class="input-icon">
+                    👤
+                </span>
+
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="Enter your username"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- PASSWORD -->
+
+        <div class="form-group">
+
+            <label>
+                Password
+            </label>
+
+            <div class="input-box">
+
+                <span class="input-icon">
+                    🔒
+                </span>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="password-toggle"
+                    onclick="togglePassword()"
+                    id="passwordToggle"
+                >
+                    👁️
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- LOGIN -->
+
+        <button
+            type="submit"
+            class="login-btn"
+            id="loginButton"
+        >
+
+            <span id="buttonText">
+                🚀 Sign In
+            </span>
+
+            <div
+                class="loading"
+                id="loading"
+            ></div>
+
+        </button>
+
+
+        <!-- STATUS -->
+
+        <div
+            class="status"
+            id="status"
+        ></div>
+
+
+    </form>
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        Secure School Management System
+        <br>
+
+        <span>Powered by School Portal</span>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   PASSWORD TOGGLE
+========================================================= */
+
+function togglePassword(){
+
+    const password =
+        document.getElementById(
+            "password"
+        );
+
+    const button =
+        document.getElementById(
+            "passwordToggle"
+        );
+
+
+    if(password.type === "password"){
+
+        password.type = "text";
+
+        button.textContent = "🙈";
+
+    }
+    else{
+
+        password.type = "password";
+
+        button.textContent = "👁️";
+
+    }
+
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+async function login(event){
+
+    event.preventDefault();
+
+
+    const username =
+        document
+        .getElementById("username")
+        .value
+        .trim();
+
+
+    const password =
+        document
+        .getElementById("password")
+        .value;
+
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+
+    const button =
+        document.getElementById(
+            "loginButton"
+        );
+
+
+    const buttonText =
+        document.getElementById(
+            "buttonText"
+        );
+
+
+    const loading =
+        document.getElementById(
+            "loading"
+        );
+
+
+    status.textContent = "";
+
+
+    if(!username || !password){
+
+        status.textContent =
+            "Please enter your username and password.";
+
+        return;
+
+    }
+
+
+    /* LOADING */
+
+    button.disabled = true;
+
+    buttonText.style.display =
+        "none";
+
+    loading.style.display =
+        "block";
+
+
+    try{
+
+        const response =
+            await fetch(
+                "/login",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        username,
+                        password
+
+                    })
+                }
+            );
+
+
+        const data =
+            await response
+            .json()
+            .catch(
+                () => ({})
+            );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                "Login failed"
+            );
+
+        }
+
+
+        /* =================================================
+           SAVE AUTHENTICATION
+        ================================================= */
+
+        if(!data.token){
+
+            throw new Error(
+                "Server did not return a login token."
+            );
+
+        }
+
+
+        localStorage.setItem(
+            "token",
+            data.token
+        );
+
+
+        localStorage.setItem(
+            "user",
+            JSON.stringify(
+                data.user
+            )
+        );
+
+
+        /* =================================================
+           GET USER ROLE
+        ================================================= */
+
+        const role =
+            String(
+                data.user?.role || ""
+            )
+            .toLowerCase()
+            .trim();
+
+
+        /* =================================================
+           REDIRECT
+        ================================================= */
+
+        if(role === "admin"){
+
+            window.location.replace(
+                "admin.html"
+            );
+
+        }
+
+        else if(role === "teacher"){
+
+            window.location.replace(
+                "teacher.html"
+            );
+
+        }
+
+        else if(role === "student"){
+
+            window.location.replace(
+                "student.html"
+            );
+
+        }
+
+        else if(role === "parent"){
+
+            window.location.replace(
+                "parent.html"
+            );
+
+        }
+
+        else{
+
+            throw new Error(
+                "Unknown account role: " +
+                (data.user?.role || "none")
+            );
+
+        }
+
+    }
+    catch(error){
+
+        console.error(
+            "LOGIN ERROR:",
+            error
+        );
+
+
+        /* REMOVE bad token */
+
+        localStorage.removeItem(
+            "token"
+        );
+
+        localStorage.removeItem(
+            "user"
+        );
+
+
+        status.textContent =
+            error.message ||
+            "Unable to login.";
+
+
+        button.disabled =
+            false;
+
+        buttonText.style.display =
+            "inline";
+
+        loading.style.display =
+            "none";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
+```

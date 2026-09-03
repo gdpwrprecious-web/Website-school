@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Dashboard</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,Arial,sans-serif;
+}
+
+body{
+    background:#070b14;
+    color:#fff;
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+        radial-gradient(circle at 10% 20%,rgba(0,255,200,.12),transparent 25%),
+        radial-gradient(circle at 90% 80%,rgba(80,80,255,.12),transparent 25%);
+    pointer-events:none;
+}
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:250px;
+    background:rgba(10,15,28,.88);
+    backdrop-filter:blur(20px);
+    border-right:1px solid rgba(255,255,255,.08);
+    padding:25px 15px;
+    z-index:10;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:800;
+    text-align:center;
+    margin-bottom:35px;
+    color:#00ffc8;
+}
+
+.logo span{
+    color:#fff;
+}
+
+.nav{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.nav button{
+    border:0;
+    background:transparent;
+    color:#aaa;
+    padding:14px 16px;
+    border-radius:12px;
+    text-align:left;
+    cursor:pointer;
+    font-size:15px;
+    transition:.25s;
+}
+
+.nav button:hover,
+.nav button.active{
+    background:rgba(0,255,200,.1);
+    color:#00ffc8;
+    transform:translateX(4px);
+}
+
+.logout{
+    position:absolute;
+    bottom:25px;
+    left:15px;
+    right:15px;
+    background:rgba(255,70,90,.1)!important;
+    color:#ff6b81!important;
+}
+
+.main{
+    margin-left:250px;
+    padding:25px;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.topbar h2{
+    font-size:26px;
+}
+
+.clock{
+    color:#00ffc8;
+    font-weight:700;
+}
+
+.hero{
+    padding:30px;
+    border-radius:22px;
+    background:linear-gradient(
+        135deg,
+        rgba(0,255,200,.12),
+        rgba(80,80,255,.08)
+    );
+    border:1px solid rgba(255,255,255,.08);
+    backdrop-filter:blur(20px);
+    margin-bottom:25px;
+}
+
+.hero h1{
+    font-size:32px;
+    margin-bottom:8px;
+}
+
+.hero p{
+    color:#aaa;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+    margin-bottom:25px;
+}
+
+.card{
+    background:rgba(15,22,38,.78);
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:18px;
+    padding:22px;
+    backdrop-filter:blur(15px);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    border-color:rgba(0,255,200,.3);
+}
+
+.card small{
+    color:#888;
+}
+
+.card h2{
+    margin-top:10px;
+    color:#00ffc8;
+}
+
+.section{
+    display:none;
+}
+
+.section.active{
+    display:block;
+    animation:fade .35s ease;
+}
+
+@keyframes fade{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.panel{
+    background:rgba(15,22,38,.82);
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:20px;
+    padding:22px;
+    margin-bottom:20px;
+    overflow-x:auto;
+}
+
+.panel h3{
+    margin-bottom:18px;
+    color:#00ffc8;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:650px;
+}
+
+th,td{
+    padding:13px;
+    border-bottom:1px solid rgba(255,255,255,.06);
+    text-align:left;
+}
+
+th{
+    color:#00ffc8;
+    font-size:13px;
+}
+
+td{
+    color:#ddd;
+}
+
+.badge{
+    display:inline-block;
+    padding:5px 10px;
+    border-radius:20px;
+    background:rgba(0,255,200,.1);
+    color:#00ffc8;
+    font-size:12px;
+}
+
+.question{
+    padding:18px;
+    border-radius:15px;
+    background:rgba(255,255,255,.03);
+    margin-bottom:12px;
+}
+
+.question strong{
+    color:#00ffc8;
+}
+
+.options{
+    margin-top:10px;
+    color:#bbb;
+    line-height:1.8;
+}
+
+.profile{
+    display:grid;
+    grid-template-columns:150px 1fr;
+    gap:25px;
+    align-items:center;
+}
+
+.avatar{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#00ffc8,#536dfe);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:45px;
+    font-weight:800;
+    color:#071018;
+}
+
+.info p{
+    margin:10px 0;
+    color:#aaa;
+}
+
+.info strong{
+    color:#fff;
+}
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    padding:15px 20px;
+    background:#101827;
+    border:1px solid rgba(0,255,200,.3);
+    border-radius:12px;
+    color:#fff;
+    opacity:0;
+    transform:translateY(20px);
+    transition:.3s;
+    z-index:100;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.mobile-menu{
+    display:none;
+}
+
+@media(max-width:900px){
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.3s;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+        padding:15px;
+    }
+
+    .mobile-menu{
+        display:block;
+        border:0;
+        background:#101827;
+        color:#00ffc8;
+        padding:10px 14px;
+        border-radius:10px;
+        cursor:pointer;
+        font-size:20px;
+    }
+
+    .grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .profile{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:550px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .hero h1{
+        font-size:25px;
+    }
+
+    .clock{
+        display:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+        SCHOOL<span>PRO</span>
+    </div>
+
+    <div class="nav">
+
+        <button class="active" onclick="showSection('dashboard',this)">
+            🏠 Dashboard
+        </button>
+
+        <button onclick="showSection('students',this)">
+            👨‍🎓 Students
+        </button>
+
+        <button onclick="showSection('results',this)">
+            📊 Results
+        </button>
+
+        <button onclick="showSection('exams',this)">
+            📝 CBT Exams
+        </button>
+
+        <button onclick="showSection('questions',this)">
+            ❓ Questions
+        </button>
+
+        <button onclick="showSection('profile',this)">
+            👤 My Profile
+        </button>
+
+        <button class="logout" onclick="logout()">
+            🚪 Logout
+        </button>
+
+    </div>
+</aside>
+
+<main class="main">
+
+    <div class="topbar">
+        <div>
+            <button class="mobile-menu" onclick="toggleMenu()">☰</button>
+        </div>
+
+        <div class="clock" id="clock"></div>
+    </div>
+
+    <!-- DASHBOARD -->
+
+    <section id="dashboard" class="section active">
+
+        <div class="hero">
+            <h1>Welcome, <span id="teacherName">Teacher</span> 👋</h1>
+            <p>
+                Teacher Command Center — monitor your students,
+                results and CBT activities.
+            </p>
+        </div>
+
+        <div class="grid">
+
+            <div class="card">
+                <small>Students</small>
+                <h2 id="studentCount">0</h2>
+            </div>
+
+            <div class="card">
+                <small>Results</small>
+                <h2 id="resultCount">0</h2>
+            </div>
+
+            <div class="card">
+                <small>CBT Exams</small>
+                <h2 id="examCount">0</h2>
+            </div>
+
+            <div class="card">
+                <small>Active CBT</small>
+                <h2 id="activeExamCount">0</h2>
+            </div>
+
+        </div>
+
+        <div class="panel">
+            <h3>Teacher Access</h3>
+
+            <p style="color:#aaa;line-height:1.8">
+                You have read-only access to CBT exams and questions.
+                You can monitor student performance and view results,
+                but only administrators can create or modify CBT exams
+                and questions.
+            </p>
+        </div>
+
+    </section>
+
+
+    <!-- STUDENTS -->
+
+    <section id="students" class="section">
+
+        <div class="panel">
+
+            <h3>Students</h3>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Class</th>
+                        <th>Age</th>
+                        <th>Account</th>
+                    </tr>
+                </thead>
+
+                <tbody id="studentsTable">
+                    <tr>
+                        <td colspan="5">Loading...</td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- RESULTS -->
+
+    <section id="results" class="section">
+
+        <div class="panel">
+
+            <h3>Student Results</h3>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Subject</th>
+                        <th>Score</th>
+                        <th>Grade</th>
+                        <th>Term</th>
+                    </tr>
+                </thead>
+
+                <tbody id="resultsTable">
+                    <tr>
+                        <td colspan="5">Loading...</td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- EXAMS -->
+
+    <section id="exams" class="section">
+
+        <div class="panel">
+
+            <h3>CBT Exams</h3>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Subject</th>
+                        <th>Duration</th>
+                        <th>Questions</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody id="examsTable">
+                    <tr>
+                        <td colspan="5">Loading...</td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- QUESTIONS -->
+
+    <section id="questions" class="section">
+
+        <div class="panel">
+
+            <h3>CBT Question Viewer</h3>
+
+            <select
+                id="examSelect"
+                onchange="loadQuestions()"
+                style="
+                    width:100%;
+                    padding:13px;
+                    background:#0b1220;
+                    color:white;
+                    border:1px solid #263247;
+                    border-radius:10px;
+                    margin-bottom:20px;
+                "
+            >
+                <option value="">Select CBT Exam</option>
+            </select>
+
+            <div id="questionsContainer">
+                <p style="color:#888">
+                    Select an exam to view its questions.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PROFILE -->
+
+    <section id="profile" class="section">
+
+        <div class="panel">
+
+            <h3>My Profile</h3>
+
+            <div class="profile">
+
+                <div class="avatar" id="avatar">
+                    T
+                </div>
+
+                <div class="info">
+
+                    <p>
+                        Name:
+                        <strong id="profileName">Loading...</strong>
+                    </p>
+
+                    <p>
+                        Username:
+                        <strong id="profileUsername">Loading...</strong>
+                    </p>
+
+                    <p>
+                        Role:
+                        <strong>Teacher</strong>
+                    </p>
+
+                    <p>
+                        Subject:
+                        <strong id="profileSubject">Not specified</strong>
+                    </p>
+
+                    <p>
+                        Class:
+                        <strong id="profileClass">Not specified</strong>
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+const token = localStorage.getItem("token");
+const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+if(!token){
+    window.location.href = "login.html";
+}
+
+if(user.role !== "teacher"){
+    alert("Teacher access required.");
+    window.location.href = "login.html";
+}
+
+
+function api(url, options = {}){
+
+    options.headers = {
+        "Content-Type":"application/json",
+        ...(options.headers || {}),
+        "Authorization":"Bearer " + token
+    };
+
+    return fetch(url, options).then(async response => {
+
+        const data = await response.json().catch(() => ({}));
+
+        if(response.status === 401){
+            logout();
+            return;
+        }
+
+        if(!response.ok){
+            throw new Error(data.message || "Request failed");
+        }
+
+        return data;
+    });
+}
+
+
+function showToast(message){
+
+    const toast = document.getElementById("toast");
+
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    },3000);
+}
+
+
+function showSection(id, button){
+
+    document.querySelectorAll(".section")
+        .forEach(section => section.classList.remove("active"));
+
+    document.getElementById(id).classList.add("active");
+
+    document.querySelectorAll(".nav button")
+        .forEach(btn => btn.classList.remove("active"));
+
+    if(button){
+        button.classList.add("active");
+    }
+
+    if(window.innerWidth <= 900){
+        document.getElementById("sidebar").classList.remove("open");
+    }
+}
+
+
+function toggleMenu(){
+
+    document.getElementById("sidebar").classList.toggle("open");
+
+}
+
+
+function logout(){
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    window.location.href = "login.html";
+}
+
+
+function updateClock(){
+
+    const now = new Date();
+
+    document.getElementById("clock").textContent =
+        now.toLocaleString();
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+
+async function loadProfile(){
+
+    try{
+
+        const data = await api("/teacher/profile");
+
+        const teacher = data.teacher || data;
+
+        const name =
+            teacher.name ||
+            user.username ||
+            "Teacher";
+
+        document.getElementById("teacherName").textContent = name;
+        document.getElementById("profileName").textContent = name;
+
+        document.getElementById("profileUsername").textContent =
+            teacher.username || user.username || "—";
+
+        document.getElementById("profileSubject").textContent =
+            teacher.subject || "Not specified";
+
+        document.getElementById("profileClass").textContent =
+            teacher.class || "Not specified";
+
+        document.getElementById("avatar").textContent =
+            name.charAt(0).toUpperCase();
+
+    }catch(error){
+
+        document.getElementById("teacherName").textContent =
+            user.username || "Teacher";
+
+        document.getElementById("profileName").textContent =
+            user.username || "Teacher";
+
+        document.getElementById("profileUsername").textContent =
+            user.username || "—";
+
+    }
+
+}
+
+
+async function loadStudents(){
+
+    try{
+
+        const data = await api("/teacher/students");
+
+        const students =
+            Array.isArray(data)
+                ? data
+                : data.students || [];
+
+        document.getElementById("studentCount").textContent =
+            students.length;
+
+        const table =
+            document.getElementById("studentsTable");
+
+        if(!students.length){
+
+            table.innerHTML =
+                `<tr>
+                    <td colspan="5">No students found.</td>
+                </tr>`;
+
+            return;
+        }
+
+        table.innerHTML = students.map(student => `
+
+            <tr>
+
+                <td>${student.id ?? "—"}</td>
+
+                <td>${escapeHTML(student.name ?? "—")}</td>
+
+                <td>${escapeHTML(student.class ?? "—")}</td>
+
+                <td>${student.age ?? "—"}</td>
+
+                <td>
+                    <span class="badge">
+                        ${student.user_id ? "Linked" : "No Account"}
+                    </span>
+                </td>
+
+            </tr>
+
+        `).join("");
+
+    }catch(error){
+
+        document.getElementById("studentsTable").innerHTML =
+            `<tr>
+                <td colspan="5">${escapeHTML(error.message)}</td>
+            </tr>`;
+
+    }
+
+}
+
+
+async function loadResults(){
+
+    try{
+
+        const data = await api("/teacher/results");
+
+        const results =
+            Array.isArray(data)
+                ? data
+                : data.results || [];
+
+        document.getElementById("resultCount").textContent =
+            results.length;
+
+        const table =
+            document.getElementById("resultsTable");
+
+        if(!results.length){
+
+            table.innerHTML =
+                `<tr>
+                    <td colspan="5">No results found.</td>
+                </tr>`;
+
+            return;
+        }
+
+        table.innerHTML = results.map(result => `
+
+            <tr>
+
+                <td>${escapeHTML(result.student_name ?? "—")}</td>
+
+                <td>${escapeHTML(result.subject ?? "—")}</td>
+
+                <td>${result.score ?? 0}</td>
+
+                <td>
+                    <span class="badge">
+                        ${escapeHTML(result.grade ?? "—")}
+                    </span>
+                </td>
+
+                <td>${escapeHTML(result.term ?? "—")}</td>
+
+            </tr>
+
+        `).join("");
+
+    }catch(error){
+
+        document.getElementById("resultsTable").innerHTML =
+            `<tr>
+                <td colspan="5">${escapeHTML(error.message)}</td>
+            </tr>`;
+
+    }
+
+}
+
+
+async function loadExams(){
+
+    try{
+
+        const data = await api("/teacher/exams");
+
+        const exams =
+            Array.isArray(data)
+                ? data
+                : data.exams || [];
+
+        document.getElementById("examCount").textContent =
+            exams.length;
+
+        const active =
+            exams.filter(e =>
+                String(e.status).toLowerCase() === "active"
+            ).length;
+
+        document.getElementById("activeExamCount").textContent =
+            active;
+
+        const table =
+            document.getElementById("examsTable");
+
+        const select =
+            document.getElementById("examSelect");
+
+        select.innerHTML =
+            `<option value="">Select CBT Exam</option>`;
+
+        exams.forEach(exam => {
+
+            const option =
+                document.createElement("option");
+
+            option.value = exam.id;
+            option.textContent =
+                `${exam.title} — ${exam.subject}`;
+
+            select.appendChild(option);
+
+        });
+
+        if(!exams.length){
+
+            table.innerHTML =
+                `<tr>
+                    <td colspan="5">No CBT exams found.</td>
+                </tr>`;
+
+            return;
+        }
+
+        table.innerHTML = exams.map(exam => `
+
+            <tr>
+
+                <td>${escapeHTML(exam.title ?? "—")}</td>
+
+                <td>${escapeHTML(exam.subject ?? "—")}</td>
+
+                <td>${exam.duration ?? 0} mins</td>
+
+                <td>${exam.total_questions ?? 0}</td>
+
+                <td>
+                    <span class="badge">
+                        ${escapeHTML(exam.status ?? "draft")}
+                    </span>
+                </td>
+
+            </tr>
+
+        `).join("");
+
+    }catch(error){
+
+        document.getElementById("examsTable").innerHTML =
+            `<tr>
+                <td colspan="5">${escapeHTML(error.message)}</td>
+            </tr>`;
+
+    }
+
+}
+
+
+async function loadQuestions(){
+
+    const examId =
+        document.getElementById("examSelect").value;
+
+    const container =
+        document.getElementById("questionsContainer");
+
+    if(!examId){
+
+        container.innerHTML =
+            `<p style="color:#888">
+                Select an exam to view its questions.
+            </p>`;
+
+        return;
+    }
+
+    container.innerHTML =
+        `<p style="color:#888">Loading questions...</p>`;
+
+    try{
+
+        const data =
+            await api(`/teacher/questions/${examId}`);
+
+        const questions =
+            Array.isArray(data)
+                ? data
+                : data.questions || [];
+
+        if(!questions.length){
+
+            container.innerHTML =
+                `<p style="color:#888">
+                    No questions found for this exam.
+                </p>`;
+
+            return;
+        }
+
+        container.innerHTML = questions.map((q,index) => `
+
+            <div class="question">
+
+                <strong>
+                    Question ${index + 1}
+                </strong>
+
+                <p style="margin-top:10px">
+                    ${escapeHTML(q.question ?? "")}
+                </p>
+
+                <div class="options">
+
+                    A. ${escapeHTML(q.option_a ?? "")}<br>
+
+                    B. ${escapeHTML(q.option_b ?? "")}<br>
+
+                    C. ${escapeHTML(q.option_c ?? "")}<br>
+
+                    D. ${escapeHTML(q.option_d ?? "")}
+
+                </div>
+
+            </div>
+
+        `).join("");
+
+    }catch(error){
+
+        container.innerHTML =
+            `<p style="color:#ff6b81">
+                ${escapeHTML(error.message)}
+            </p>`;
+
+    }
+
+}
+
+
+function escapeHTML(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+async function init(){
+
+    await loadProfile();
+    await loadStudents();
+    await loadResults();
+    await loadExams();
+
+}
+
+init();
+
+</script>
+
+</body>
+</html>
